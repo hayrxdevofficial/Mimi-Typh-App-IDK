@@ -1,0 +1,39 @@
+name: Build Mimi iOS IPA
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app
+
+      - name: Build unsigned archive
+        run: |
+          xcodebuild -project Mimi.xcodeproj \
+            -scheme Mimi \
+            -configuration Debug \
+            -sdk iphoneos \
+            -archivePath build/Mimi.xcarchive \
+            archive \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Package into IPA
+        run: |
+          mkdir -p build/Payload
+          cp -R build/Mimi.xcarchive/Products/Applications/Mimi.app build/Payload/
+          cd build && zip -r Mimi-unsigned.ipa Payload
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: mimi-ios-ipa
+          path: build/Mimi-unsigned.ipa
