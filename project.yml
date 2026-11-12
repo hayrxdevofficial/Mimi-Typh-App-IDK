@@ -6,9 +6,12 @@ targets:
     type: application
     platform: iOS
     deploymentTarget: "15.0"
-    sources: [Mimi]          # папка с вашими .swift файлами и Assets.xcassets
+    sources: [Mimi]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.example.mimi
-        INFOPLIST_FILE: Mimi/Info.plist
+        GENERATE_INFOPLIST_FILE: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIStatusBarHidden: YES
+        INFOPLIST_KEY_UIRequiresFullScreen: YES
